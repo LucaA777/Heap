@@ -12,6 +12,7 @@ int getRightIndex(int index);
 int getParentIndex(int index);
 void zeroHeap(int* heap);
 void printHeap(int* heap);
+void print(int* heap, int index, int depth);
 
 int main() {
 
@@ -85,38 +86,25 @@ int getParentIndex(int index) {
 
 void printHeap(int* heap) {
 	cout << "Heap:" << endl;
-
-	int index = 1;
-	int rowStartIndex = 1;
-	int rowLength = 0;
-
-	while (heap[rowStartIndex] != 0) {
-		
-		rowLength += to_string(heap[index]).length() + 2;
-
-		while (heap[index] != 0) {
-			cout << " - " <<  heap[index];
-			index = getLeftIndex(index);
-		}	
-
-		cout << endl;
-	
-
-		for (int i = 0; i < rowLength; i++) {
-			cout << " ";
-		}
-		
-		cout << "\\" << endl;
-
-		for (int i = 0; i < rowLength; i++) {
-			cout << " ";
-		}
-
-		rowStartIndex = getRightIndex(rowStartIndex);
-		index = rowStartIndex;
-		
-
-	}
+	print(heap, 1, 1);
 	cout << endl;
+}
+
+void print(int* heap, int index, int depth) {
+
+	if (heap[getRightIndex(index)] != 0) {
+		print(heap, getRightIndex(index), depth + to_string(heap[index]).length() + 3);
+	}
+
+	for (int i = 0; i < depth; i++) {
+		cout << " ";
+	}	
+
+	cout << heap[index];
+	cout << endl;
+
+	if (heap[getLeftIndex(index)] != 0) {
+		print(heap, getLeftIndex(index), depth + to_string(heap[index]).length() + 3);
+	}
 }
 
