@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -10,6 +11,7 @@ int getLeftIndex(int index);
 int getRightIndex(int index);
 int getParentIndex(int index);
 void zeroHeap(int* heap);
+void printHeap(int* heap);
 
 int main() {
 
@@ -23,18 +25,17 @@ int main() {
 
 		insertNumberInHeap(heap, num);
 
-		cout << "Heap: " << heap << endl;
-
+		printHeap(heap);
 	}	
 
-	
+
 
 
 	return 0;
 }
 
 void insertNumberInHeap(int* heap, int num) {
-	
+
 	//find first empty space
 	int index = 0;
 	for (int i = 1; i < HEAP_SIZE; i++) {
@@ -43,7 +44,7 @@ void insertNumberInHeap(int* heap, int num) {
 			break;
 		}
 	}
-	
+
 	cout << "Found empty spot at " << index << endl;
 	//insert new number
 	heap[index] = num;
@@ -54,12 +55,13 @@ void insertNumberInHeap(int* heap, int num) {
 		int temp = heap[getParentIndex(index)];
 		heap[getParentIndex(index)] = heap[index];
 		heap[index] = temp;
-		
+
 		index = getParentIndex(index);
-		
+
 		cout << "Swapped with parent" << endl;
 		cout << "Now at index " << index << endl;
 	}
+
 
 } 
 
@@ -79,5 +81,42 @@ int getRightIndex(int index) {
 
 int getParentIndex(int index) {
 	return index / 2 > 0 ? index / 2 : 1;
+}
+
+void printHeap(int* heap) {
+	cout << "Heap:" << endl;
+
+	int index = 1;
+	int rowStartIndex = 1;
+	int rowLength = 0;
+
+	while (heap[rowStartIndex] != 0) {
+		
+		rowLength += to_string(heap[index]).length() + 2;
+
+		while (heap[index] != 0) {
+			cout << " - " <<  heap[index];
+			index = getLeftIndex(index);
+		}	
+
+		cout << endl;
+	
+
+		for (int i = 0; i < rowLength; i++) {
+			cout << " ";
+		}
+		
+		cout << "\\" << endl;
+
+		for (int i = 0; i < rowLength; i++) {
+			cout << " ";
+		}
+
+		rowStartIndex = getRightIndex(rowStartIndex);
+		index = rowStartIndex;
+		
+
+	}
+	cout << endl;
 }
 
