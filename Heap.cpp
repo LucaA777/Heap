@@ -1,3 +1,11 @@
+/*
+  This program allows a user to create a max heap, which is a binary tree sorted with the 
+  largest numbers towards the root, and implemented with an array rather than nodes. The 
+  user is able to add numbers both manually and through files, as well as remove the head 
+  or all nodes from the heap. 
+  Author: Luca Ardanaz
+  Last Update: 1/21/2026
+*/
 #include <iostream>
 #include <string>
 #include <fstream>
