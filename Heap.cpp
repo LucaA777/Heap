@@ -25,18 +25,22 @@ int main() {
 
   string input;
 
+  //input loop
   while (input != "quit") {
-    cout << "Enter a command (Add, Print, File, Remove, RemoveAll, Quit):" << endl;
+    //asks for input
+    cout << endl << endl;
+    cout << "Enter a number to add or a command (Print, File, Remove, RemoveAll, Quit):" << endl;
     cin >> input;
     input = lowerCase(input);
-
+    cout << endl;
+    //attempts to process the input at a number and add it to the heap
     try {
       int num = stoi(input);
       insertNumberInHeap(heap, num);
       printHeap(heap);
     }
     catch(...) {}
-    
+
     if (input == "add") {
       int num = 0;
       cout << "Enter a number:" << endl;
@@ -61,6 +65,7 @@ int main() {
     }
 
     else if (input == "removeall") {
+      //repeatedly run remove function until the heap is empty
       while (removeHead(heap) != 0) {}
     }
 
@@ -73,6 +78,7 @@ int main() {
   return 0;
 }
 
+//insets any number in heap sorted to have higher numbers towards the root
 void insertNumberInHeap(int* &heap, int num) {
 
   //find first empty space
@@ -84,7 +90,6 @@ void insertNumberInHeap(int* &heap, int num) {
     }
   }
 
-  cout << "Found empty spot at " << index << endl;
   //insert new number
   heap[index] = num;
 
@@ -96,15 +101,13 @@ void insertNumberInHeap(int* &heap, int num) {
     heap[index] = temp;
 
     index = getParentIndex(index);
-
-    cout << "Swapped with parent" << endl;
-    cout << "Now at index " << index << endl;
   }
 
 
 } 
 
-void zeroHeap(int * heap) {
+//fill the heap with zeros
+void zeroHeap(int* heap) {
   for (int i = 0; i < HEAP_SIZE; i++) {
     heap[i] = 0;
   }		
@@ -122,27 +125,33 @@ int getParentIndex(int index) {
   return index / 2 > 0 ? index / 2 : 1;
 }
 
+//caller for recursive printing
 void printHeap(int* heap) {
   cout << "Heap:" << endl;
   print(heap, 1, 1);
   cout << endl;
 }
 
+//recursively prints tree
 void print(int* heap, int index, int depth) {
 
+  //prints everything to the right of an index first
   if (heap[getRightIndex(index)] != 0) {
-    print(heap, getRightIndex(index), depth + to_string(heap[index]).length() + 3);
+    print(heap, getRightIndex(index), depth + 1);
   }
 
-  for (int i = 0; i < depth; i++) {
-    cout << " ";
+  //adds appropriate spacing
+  for (int i = 0; i < depth - 1; i++) {
+    cout << "\t";
   }	
 
+  //prints index
   cout << heap[index];
   cout << endl;
 
+  //then prints everything to the left
   if (heap[getLeftIndex(index)] != 0) {
-    print(heap, getLeftIndex(index), depth + to_string(heap[index]).length() + 3);
+    print(heap, getLeftIndex(index), depth + 1);
   }
 }
 
@@ -154,8 +163,11 @@ string lowerCase(string str) {
   return str;
 }
 
+//reads a file and adds all values to the heap
 void processFile(int* &heap) {
   int num = 0;
+
+  //get the file name from the user
   cout << "Enter the file name: " << endl;
   string fileName;
   cin >> fileName;
@@ -165,23 +177,29 @@ void processFile(int* &heap) {
   string numStr;
   int counter = 0;
 
+  //add each line of the file, if it can be converted to an integer
   while (getline(file, numStr) && counter < HEAP_SIZE - 1) {
-    num = stoi(numStr);
-    cout << "Converted " << numStr << " into " << num << "." << endl;
-    insertNumberInHeap(heap, num);
-    counter++;
+    try {
+      num = stoi(numStr);
+      insertNumberInHeap(heap, num);
+      counter++;
+    }
+    catch(...) {}
   }
 
 }
 
 int removeHead(int* &heap) {
-
+  //if the heap is empty, return immediately 
   if (heap[1] == 0) {
     return 0;
   }
 
   int head = heap[1];
 
+  //choose the larger side
+  //copy that number into the current index
+  //repeat again at that side
   int index = 1;
   while (heap[index] != 0) {
     if (heap[getLeftIndex(index)] > heap[getRightIndex(index)]) {
