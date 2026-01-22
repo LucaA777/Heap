@@ -1,9 +1,10 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
-const int HEAP_SIZE = 101;
+const int HEAP_SIZE = 201;
 
 
 void insertNumberInHeap(int* heap, int num);
@@ -18,7 +19,36 @@ int main() {
 
 	int* heap = new int[HEAP_SIZE];
 
-	int num = 0;
+  cout << "Would you like to enter a file? (y/n)" << endl;
+
+  string input;
+  cin >> input;
+
+
+  int num = 0;
+  
+  if (input == "y") {
+    cout << "Enter the file name: " << endl;
+    string fileName;
+    cin >> fileName;
+
+    fstream file(fileName);
+    
+    string numStr;
+    int counter = 0;
+
+    while (getline(file, numStr) && counter < HEAP_SIZE - 1) {
+      num = stoi(numStr);
+      cout << "Converted " << numStr << " into " << num << "." << endl;
+      insertNumberInHeap(heap, num);
+      counter++;
+    }
+
+    printHeap(heap);
+
+  }
+
+
 
 	while (true) {
 		cout << "Please enter a number:" << endl;
